@@ -1,0 +1,19 @@
+{
+  "overview": "Aplikasi rekap harian untuk mencatat kelebihan atau kekurangan porsi nasi dan lauk setiap hari.",
+  "features": [
+    "Catat rekap harian nasi dan lauk dengan jumlah tersedia dan terpakai",
+    "Hitung otomatis kelebihan atau kekurangan porsi",
+    "Lihat riwayat rekap dengan filter, pencarian, dan urutan",
+    "Ringkasan total kelebihan dan kekurangan porsi",
+    "Grafik tren harian kelebihan vs kekurangan",
+    "Kelola daftar jenis item seperti nasi dan lauk"
+  ],
+  "category": "productivity",
+  "tags": [
+    "daily-recap",
+    "food",
+    "inventory",
+    "tracking"
+  ],
+  "last_updated": "2026-10-13T23:01:42.209Z"
+}

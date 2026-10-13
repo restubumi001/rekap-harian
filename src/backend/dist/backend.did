@@ -1,0 +1,193 @@
+type Value = 
+ variant {
+   "bool": bool;
+   float: float64;
+   "int": int;
+   "nat": nat;
+   "null";
+   "text": text;
+ };
+type UserRole = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type Timestamp = nat;
+type Result__1 = 
+ record {
+   hasMore: bool;
+   rows: vec vec Cell;
+ };
+type Result_4 = 
+ variant {
+   err: Error;
+   ok;
+ };
+type Result_3 = 
+ variant {
+   err: ItemError;
+   ok;
+ };
+type Result_2 = 
+ variant {
+   err: RecapError;
+   ok;
+ };
+type Result_1 = 
+ variant {
+   err: ItemError;
+   ok: Item;
+ };
+type Result = 
+ variant {
+   err: RecapError;
+   ok: RecapView;
+ };
+type RecapView = 
+ record {
+   available: nat;
+   createdAt: Timestamp;
+   date: text;
+   difference: int;
+   id: RecapId;
+   itemId: ItemId;
+   itemName: text;
+   kind: ItemKind;
+   status: RecapStatus;
+   used: nat;
+ };
+type RecapSummary = 
+ record {
+   shortfallCount: nat;
+   surplusCount: nat;
+   totalShortfall: nat;
+   totalSurplus: nat;
+ };
+type RecapStatus = 
+ variant {
+   balanced;
+   shortfall;
+   surplus;
+ };
+type RecapSort = 
+ variant {
+   dateAsc;
+   dateDesc;
+   differenceAsc;
+   differenceDesc;
+ };
+type RecapInput = 
+ record {
+   available: nat;
+   date: text;
+   itemId: ItemId;
+   used: nat;
+ };
+type RecapId = nat;
+type RecapFilter = 
+ record {
+   endDate: opt text;
+   kind: opt ItemKind;
+   search: opt text;
+   startDate: opt text;
+   status: opt RecapStatus;
+ };
+type RecapError = 
+ variant {
+   invalidAmount;
+   invalidDate;
+   invalidName;
+   notAuthorized;
+   unknownItem;
+   unknownRecap;
+ };
+type KindSummary = 
+ record {
+   kind: ItemKind;
+   shortfall: nat;
+   surplus: nat;
+ };
+type ItemKind = 
+ variant {
+   other;
+   rice;
+   sideDish;
+ };
+type ItemInput = 
+ record {
+   kind: ItemKind;
+   name: text;
+ };
+type ItemId = nat;
+type ItemError = 
+ variant {
+   invalidName;
+   itemInUse;
+   notAuthorized;
+   unknownItem;
+ };
+type Item = 
+ record {
+   id: ItemId;
+   kind: ItemKind;
+   name: text;
+ };
+type Error = 
+ variant {
+   AmbiguousAttribute: record {
+                         field: text;
+                         sources: vec text;
+                       };
+   FrontendOriginMismatch: record {
+                             expected: vec text;
+                             got: text;
+                           };
+   FrontendOriginsNotConfigured;
+   MalformedCandid;
+   MissingField: text;
+   MixedSsoSources: record {
+                      otherKeys: vec text;
+                      ssoKeys: vec text;
+                    };
+   NoAttributes;
+   Stale: record {ageNs: nat;};
+   UnknownNonce;
+   UntrustedSsoSource: record {domain: text;};
+ };
+type DailyTrendPoint = 
+ record {
+   date: text;
+   shortfall: nat;
+   surplus: nat;
+ };
+type Cell = 
+ record {
+   name: text;
+   value: Value;
+ };
+service : {
+  _initialize_access_control: () -> ();
+  _internet_identity_sign_in_finish: () -> (Result_4);
+  _internet_identity_sign_in_start: () -> (blob);
+  addItem: (input: ItemInput) -> (Result_1);
+  addRecap: (input: RecapInput) -> (Result);
+  assignCallerUserRole: (user: principal, role: UserRole) -> ();
+  deleteItem: (id: ItemId) -> (Result_3);
+  deleteRecap: (id: RecapId) -> (Result_2);
+  execute: (qJson: text) -> (Result__1) query;
+  filterRecaps: (filter: RecapFilter, sort: RecapSort) ->
+   (vec RecapView) query;
+  getApiDoc: () -> (text) query;
+  getCallerUserRole: () -> (UserRole) query;
+  getRecap: (id: RecapId) -> (opt RecapView) query;
+  isCallerAdmin: () -> (bool) query;
+  listItems: () -> (vec Item) query;
+  listRecaps: () -> (vec RecapView) query;
+  recapDailyTrend: (filter: RecapFilter) -> (vec DailyTrendPoint) query;
+  recapKindSummary: (filter: RecapFilter) -> (vec KindSummary) query;
+  recapSummary: (filter: RecapFilter) -> (RecapSummary) query;
+  schema: () -> (text) query;
+  updateItem: (id: ItemId, input: ItemInput) -> (Result_1);
+  updateRecap: (id: RecapId, input: RecapInput) -> (Result);
+}
